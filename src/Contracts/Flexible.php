@@ -31,4 +31,12 @@ interface Flexible
      * @return $this
      */
     public function limit(int $instances = 1) : Flexible;
+
+    /**
+     * Retrieve the amount of layouts that can be instanciated in 
+     * this Flexible container.
+     *
+     * @return null|int
+     */
+    public function getLimit() : ?int;
 }

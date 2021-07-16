@@ -26,4 +26,15 @@ trait HasLayoutInstances
 
         return $this;
     }
+
+    /**
+     * Retrieve the amount of layouts that can be instanciated in 
+     * this Flexible container.
+     *
+     * @return null|int
+     */
+    public function getLimit() : ?int
+    {
+        return $this->limit;
+    }
 }
