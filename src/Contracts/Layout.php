@@ -5,7 +5,7 @@ namespace Whitecube\LaravelFlexibleContent\Contracts;
 interface Layout
 {
     /**
-     * Define the layout's unique key.
+     * Define the layout's unique key (layout name).
      *
      * @param string $key
      * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
@@ -20,13 +20,28 @@ interface Layout
     public function getKey() : ?string;
 
     /**
+     * Define the layout instance's unique and immutable identifier.
+     *
+     * @param string $id
+     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
+     */
+    public function id(string $id) : Layout;
+
+    /**
+     * Retrieve the layout instance's unique identifier.
+     *
+     * @return null|string
+     */
+    public function getId() : ?string;
+
+    /**
      * Define the amount of layouts of this kind that can be
      * instanciated in a Flexible container.
      *
-     * @param int $instances
+     * @param null|int $instances
      * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function limit(int $instances) : Layout;
+    public function limit(?int $instances) : Layout;
 
     /**
      * Retrieve the amount of layouts of this kind that can be
@@ -35,4 +50,28 @@ interface Layout
      * @return null|int
      */
     public function getLimit() : ?int;
+
+    /**
+     * Set the array of layout instance attributes. No checking is done.
+     *
+     * @param array $attributes
+     * @param bool $syncOriginal
+     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
+     */
+    public function attributes(array $attributes, $syncOriginal = false) : Layout;
+
+    /**
+     * Get all of the current attributes on the layout instance.
+     *
+     * @return array
+     */
+    public function getAttributes();
+
+    /**
+     * Create a layout instance from this layout.
+     *
+     * @param int $instances
+     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
+     */
+    public function make(?string $id = null, array $attributes = []) : Layout;
 }

@@ -61,10 +61,21 @@ trait HasLayouts
      */
     public function hasLayout(string $key) : bool
     {
+        return ! is_null($this->getLayout($key));
+    }
+
+    /**
+     * Get the defined layout for given key in the Flexible container.
+     *
+     * @param string $key
+     * @return null|\Whitecube\LaravelFlexibleContent\Contracts\Layout
+     */
+    public function getLayout(string $key) : ?Layout
+    {
         foreach ($this->layouts as $layout) {
-            if($layout->getKey() === $key) return true;
+            if($layout->getKey() === $key) return $layout;
         }
 
-        return false;
+        return null;
     }
 }

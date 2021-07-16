@@ -6,42 +6,67 @@ use Whitecube\LaravelFlexibleContent\Flexible;
 use Tests\Fixtures\CustomLayout;
 
 it('can limit the whole flexible container\'s layout count', function() {
-    $flexible = new Flexible();
+    $flexible = (new Flexible())->register(fn ($layout) => $layout->key('foo'));
 
     expect($flexible->getLimit())->toBeNull();
 
     $flexible->limit(1);
 
-    expect($flexible->getLimit())->toBeOne();
+    expect($flexible->getLimit())->toBe(1);
 
-    // TODO : add a single instance
-    // TODO : add another one, wrapped in a try...catch and expect an exception to be thrown ?
+    $flexible->insert('foo');
+
+    $exception = null;
+    try {
+        $flexible->insert('foo');
+    } catch (\Exception $e) {
+        $exception = $e;
+    }
+
+    expect($flexible->count())->toBe(1);
+    // TODO : expect exception to instance of...
 });
 
 it('can remove the whole flexible container\'s limit by providing a negative integer', function() {
-    $flexible = (new Flexible())->limit(1);
+    $flexible = (new Flexible())
+        ->register(fn ($layout) => $layout->key('foo'))
+        ->limit(1);
 
-    expect($flexible->getLimit())->toBeOne();
+    expect($flexible->getLimit())->toBe(1);
 
-    // TODO : add a single instance
+    $flexible->insert('foo');
 
     $flexible->limit(-1);
 
     expect($flexible->getLimit())->toBeNull();
 
-    // TODO : add another single instance
-    // TODO : expect the layout instances count to be 2.
+    $flexible->insert('foo');
+
+    expect($flexible->count())->toBe(2);
 });
 
 it('can define a layout-specific limit from custom layout class', function() {
     $layout = new CustomLayout();
 
-    $flexible = (new Flexible())->register($layout);
+    $flexible = (new Flexible())
+        ->register($layout)
+        ->register(fn ($layout) => $layout->key('foo'));
 
-    expect($layout->getLimit())->toBeOne();
+    expect($layout->getLimit())->toBe(1);
 
-    // TODO : add a custom layout
-    // TODO : add another custom layout and expect an exception to be thrown ?
+    $flexible->insert('custom');
+    $flexible->insert('foo');
+
+    $exception = null;
+    try {
+        $flexible->insert('custom');
+    } catch (\Exception $e) {
+        $exception = $e;
+    }
+
+    expect($flexible->count('custom'))->toBe(1);
+    expect($flexible->count())->toBe(2);
+    // TODO : expect exception to instance of...
 });
 
 it('can override a layout-specific limit from custom layout class during registration', function() {
@@ -51,21 +76,36 @@ it('can override a layout-specific limit from custom layout class during registr
 
     expect($layout->getLimit())->toBeNull();
 
-    // TODO : add a custom layout
-    // TODO : expect the layout instances count to be 2.
+    $flexible->insert('custom');
+    $flexible->insert('custom');
+
+    expect($flexible->count('custom'))->toBe(2);
 });
 
 it('can set a layout-specific limit from closure registration', function() {
     $layout = null;
 
-    $flexible = (new Flexible())->register(function($default) use (&$layout) {
-        $layout = $default->key('foo')->limit(1);
-    });
+    $flexible = (new Flexible())
+        ->register(function($default) use (&$layout) {
+            $layout = $default->key('foo')->limit(1);
+        })
+        ->register(fn ($layout) => $layout->key('bar'));
 
-    expect($layout->getLimit())->toBeOne();
+    expect($layout->getLimit())->toBe(1);
 
-    // TODO : add a foo layout
-    // TODO : add another foo layout and expect an exception to be thrown ?
+    $flexible->insert('foo');
+    $flexible->insert('bar');
+
+    $exception = null;
+    try {
+        $flexible->insert('foo');
+    } catch (\Exception $e) {
+        $exception = $e;
+    }
+
+    expect($flexible->count('foo'))->toBe(1);
+    expect($flexible->count())->toBe(2);
+    // TODO : expect exception to instance of...
 });
 
 it('can override a layout-specific limit from closure during registration', function() {
@@ -77,6 +117,8 @@ it('can override a layout-specific limit from closure during registration', func
     
     expect($layout->getLimit())->toBeNull();
 
-    // TODO : add a foo layout
-    // TODO : expect the layout instances count to be 2.
+    $flexible->insert('foo');
+    $flexible->insert('foo');
+
+    expect($flexible->count())->toBe(2);
 });

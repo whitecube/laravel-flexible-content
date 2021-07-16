@@ -24,13 +24,21 @@ interface Flexible
     public function hasLayout(string $key) : bool;
 
     /**
+     * Get the defined layout for given key in the Flexible container.
+     *
+     * @param string $key
+     * @return null|\Whitecube\LaravelFlexibleContent\Contracts\Layout
+     */
+    public function getLayout(string $key) : ?Layout;
+
+    /**
      * Prevent the Flexible container to instanciate more layouts
      * than the indicated amount.
      *
-     * @param int $instances
+     * @param null|int $instances
      * @return $this
      */
-    public function limit(int $instances = 1) : Flexible;
+    public function limit(?int $instances = 1) : Flexible;
 
     /**
      * Retrieve the amount of layouts that can be instanciated in 
@@ -39,4 +47,23 @@ interface Flexible
      * @return null|int
      */
     public function getLimit() : ?int;
+
+    /**
+     * Add a layout instance to the Flexible container.
+     *
+     * @param string $key
+     * @param array $attributes
+     * @param null|int $index
+     * @param null|string $id
+     * @return void
+     */
+    public function insert(string $key, array $attributes = [], ?int $index = null, ?string $id = null);
+
+    /**
+     * Get the amount of inserted layout instances, total or per layout key.
+     *
+     * @param null|string $key
+     * @return int
+     */
+    public function count(?string $key = null);
 }
