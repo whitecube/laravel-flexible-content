@@ -5,16 +5,25 @@ Base library for repeated layout fields, content builders and other collection c
 
 - Installation & base use cases
 - layouts registration
+    - `register($layout, $limit)`
 - get all registered layouts
-- limiting layouts count (global & layout-specific)
-- inserting instances
+    - `layouts()`
+- limiting layouts
+    - `limit($instances)`
+    - `$layout->limit($instances)`
+- building instances
+    - `build($data)`
+    - `buildUsing($callback)`
+    - `insert($key, $attributes, $index, $id)`
 - get all inserted instances, and manipulate the LayoutCollection :
-    - `find($key)`
-    - `whereKey($key)`
-    - `whereKeyNot($key)`
-    - `whereKeyIn($key)`
-    - `whereKeyNotIn($key)`
+    - `instances()`
+    - `$instances->find($key)`
+    - `$instances->whereKey($key)`
+    - `$instances->whereKeyNot($key)`
+    - `$instances->whereKeyIn($key)`
+    - `$instances->whereKeyNotIn($key)`
 - counting instances
+    - `count($key = null)`
 
 ## Testing
 

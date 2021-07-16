@@ -8,4 +8,5 @@ class Flexible implements FlexibleInterface
 {
     use Concerns\HasLayouts;
     use Concerns\HasLayoutInstances;
+    use Concerns\HasResolver;
 }
