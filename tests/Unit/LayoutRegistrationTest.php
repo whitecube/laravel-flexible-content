@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Whitecube\LaravelFlexibleContent\Flexible;
+use Whitecube\LaravelFlexibleContent\LayoutsCollection;
 use Whitecube\LaravelFlexibleContent\Exceptions\InvalidLayoutException;
 use Whitecube\LaravelFlexibleContent\Exceptions\InvalidLayoutKeyException;
 use Tests\Fixtures\CustomLayout;
@@ -75,3 +76,14 @@ it('cannot register the same layout key twice', function() {
 
     $flexible->register(CustomLayout::class);
 })->throws(InvalidLayoutKeyException::class);
+
+it('can return all registered layouts as a LayoutsCollection', function() {
+    $flexible = (new Flexible())
+        ->register(fn ($layout) => $layout->key('foo'))
+        ->register(fn ($layout) => $layout->key('bar'));
+
+    $collection = $flexible->layouts();
+
+    expect($collection)->toBeInstanceOf(LayoutsCollection::class);
+    expect($collection->keys()->implode(','))->toBe('foo,bar');
+});

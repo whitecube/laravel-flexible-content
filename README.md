@@ -5,6 +5,7 @@ Base library for repeated layout fields, content builders and other collection c
 
 - Installation & base use cases
 - layouts registration
+- get all registered layouts
 - limiting layouts count (global & layout-specific)
 - inserting instances
 - counting instances

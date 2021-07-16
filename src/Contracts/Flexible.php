@@ -2,6 +2,7 @@
 
 namespace Whitecube\LaravelFlexibleContent\Contracts;
 
+use Whitecube\LaravelFlexibleContent\LayoutsCollection;
 use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 
 interface Flexible
@@ -30,6 +31,13 @@ interface Flexible
      * @return null|\Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
     public function getLayout(string $key) : ?Layout;
+
+    /**
+     * Get all the defined layouts as a collection.
+     *
+     * @return \Whitecube\LaravelFlexibleContent\LayoutsCollection
+     */
+    public function layouts() : LayoutsCollection;
 
     /**
      * Prevent the Flexible container to instanciate more layouts

@@ -3,6 +3,7 @@
 namespace Whitecube\LaravelFlexibleContent\Concerns;
 
 use Whitecube\LaravelFlexibleContent\Layout as BaseLayout;
+use Whitecube\LaravelFlexibleContent\LayoutsCollection;
 use Whitecube\LaravelFlexibleContent\Contracts\Flexible;
 use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 use Whitecube\LaravelFlexibleContent\Exceptions\InvalidLayoutException;
@@ -13,9 +14,9 @@ trait HasLayouts
     /**
      * The defined instanciable layouts
      *
-     * @var array
+     * @var \Whitecube\LaravelFlexibleContent\LayoutsCollection
      **/
-    protected $layouts = [];
+    protected $layouts;
 
     /**
      * Add an instanciable layout to the Flexible container.
@@ -48,7 +49,7 @@ trait HasLayouts
             $layout->limit($limit);
         }
 
-        $this->layouts[] = $layout;
+        $this->layouts()->put($key, $layout);
 
         return $this;
     }
@@ -61,7 +62,7 @@ trait HasLayouts
      */
     public function hasLayout(string $key) : bool
     {
-        return ! is_null($this->getLayout($key));
+        return $this->layouts ? $this->layouts->has($key) : false;
     }
 
     /**
@@ -72,10 +73,20 @@ trait HasLayouts
      */
     public function getLayout(string $key) : ?Layout
     {
-        foreach ($this->layouts as $layout) {
-            if($layout->getKey() === $key) return $layout;
+        return $this->layouts ? $this->layouts->get($key) : null;
+    }
+
+    /**
+     * Get all the defined layouts as a collection.
+     *
+     * @return \Whitecube\LaravelFlexibleContent\LayoutsCollection
+     */
+    public function layouts() : LayoutsCollection
+    {
+        if(! $this->layouts) {
+            $this->layouts = new LayoutsCollection();
         }
 
-        return null;
+        return $this->layouts;
     }
 }
