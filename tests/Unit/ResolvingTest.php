@@ -30,13 +30,12 @@ it('can insert a layout at a certain index in its value', function() {
         $layout->key('foo');
     });
 
-    $flexible->insert('foo', [], null, 'first');
-    $flexible->insert('foo', [], null, 'third');
-    $flexible->insert('foo', [], 1, 'second');
+    $flexible->insert('foo', [], null, 'one');
+    $flexible->insert('foo', [], null, 'three');
+    $flexible->insert('foo', [], 1, 'two');
 
     expect($flexible->count())->toBe(3);
-
-    // TODO : check index order
+    expect($flexible->instances()->map(fn ($layout) => $layout->getId())->implode(','))->toBe('one,two,three');
 });
 
 it('cannot add an unregistered layout key to its value', function() {

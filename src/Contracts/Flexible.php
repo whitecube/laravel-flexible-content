@@ -68,6 +68,13 @@ interface Flexible
     public function insert(string $key, array $attributes = [], ?int $index = null, ?string $id = null);
 
     /**
+     * Get all the inserted layout instances as a collection.
+     *
+     * @return \Whitecube\LaravelFlexibleContent\LayoutsCollection
+     */
+    public function instances() : LayoutsCollection;
+
+    /**
      * Get the amount of inserted layout instances, total or per layout key.
      *
      * @param null|string $key

@@ -2,6 +2,7 @@
 
 namespace Whitecube\LaravelFlexibleContent\Concerns;
 
+use Whitecube\LaravelFlexibleContent\LayoutsCollection;
 use Whitecube\LaravelFlexibleContent\Contracts\Flexible;
 use Whitecube\LaravelFlexibleContent\Exceptions\LayoutNotFoundException;
 
@@ -10,9 +11,9 @@ trait HasLayoutInstances
     /**
      * The resolved layout instances (the Flexible container's value)
      *
-     * @var array
+     * @var \Whitecube\LaravelFlexibleContent\LayoutsCollection
      **/
-    protected $instances = [];
+    protected $instances;
 
     /**
      * The max. amount of instances this Flexible may contain.
@@ -63,12 +64,23 @@ trait HasLayoutInstances
 
         $instance = $layout->make($id, $attributes);
 
-        if(is_null($index) || $index >= count($this->instances)) {
-            $this->instances[] = $instance;
-            return;
+        (is_null($index) || $index >= $this->count())
+            ? $this->instances()->push($instance)
+            : $this->instances()->splice($index, 0, [$instance]);
+    }
+
+    /**
+     * Get all the inserted layout instances as a collection.
+     *
+     * @return \Whitecube\LaravelFlexibleContent\LayoutsCollection
+     */
+    public function instances() : LayoutsCollection
+    {
+        if(! $this->instances) {
+            $this->instances = new LayoutsCollection();
         }
 
-        array_splice($this->instances, $index, 0, [$instance]);
+        return $this->instances;
     }
 
     /**
@@ -79,12 +91,12 @@ trait HasLayoutInstances
      */
     public function count(?string $key = null)
     {
-        if(is_null($key)) {
-            return count($this->instances);
+        if(! $this->instances) {
+            return 0;
         }
 
-        return array_reduce($this->instances, function($count, $instance) use ($key) {
-            return ($instance->getKey() === $key) ? ++$count : $count;
-        }, 0);
+        return is_null($key)
+            ? $this->instances->count()
+            : $this->instances->whereKey($key)->count();
     }
 }
