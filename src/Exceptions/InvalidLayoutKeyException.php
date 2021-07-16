@@ -3,8 +3,9 @@
 namespace Whitecube\LaravelFlexibleContent\Exceptions;
 
 use InvalidArgumentException;
+use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 
-class InvalidLayoutKeyException extends InvalidLayoutException
+class InvalidLayoutKeyException extends InvalidArgumentException
 {
     /**
      * Create a new exception instance with given arguments
@@ -19,7 +20,7 @@ class InvalidLayoutKeyException extends InvalidLayoutException
         $classname = get_class($layout);
         
         if($key && $exists) {
-            return new static('Flexible layout key "' . $key . '" for "' . $classname . '" is already in use.');
+            return new static('Flexible layout key "' . $key . '" for layout "' . $classname . '" is already in use.');
         }
 
         return new static('Undefined key for Flexible layout "' . $classname . '".');

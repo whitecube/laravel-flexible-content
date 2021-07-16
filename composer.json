@@ -8,7 +8,9 @@
         "php": ">=8.0.0",
         "laravel/framework": "^8.0"
     },
-    "require-dev": {},
+    "require-dev": {
+        "pestphp/pest": "^1.10"
+    },
     "license": "MIT",
     "autoload": {
         "psr-4": {

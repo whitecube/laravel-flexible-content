@@ -3,7 +3,6 @@
 namespace Whitecube\LaravelFlexibleContent\Exceptions;
 
 use InvalidArgumentException;
-use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 
 class InvalidLayoutException extends InvalidArgumentException
 {

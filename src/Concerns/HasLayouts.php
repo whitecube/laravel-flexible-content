@@ -29,15 +29,19 @@ trait HasLayouts
         if(is_string($layout) && is_a($layout, Layout::class, true)) {
             $layout = new $layout;
         } elseif (is_callable($layout)) {
-            $layout = call_user_func($layout, new BaseLayout);
+            $layout = call_user_func($layout, ($instance = new BaseLayout)) ?? $instance;
         }
 
         if(! is_a($layout, Layout::class)) {
             throw InvalidLayoutException::make($layout);
         }
 
-        if(! ($key = $layout->getKey()) || ($exists = $this->hasLayout($key))) {
-            throw InvalidLayoutKeyException::make($layout, $key, $exists);
+        if(! ($key = $layout->getKey())) {
+            throw InvalidLayoutKeyException::make($layout);
+        }
+
+        if($this->hasLayout($key)) {
+            throw InvalidLayoutKeyException::make($layout, $key, true);
         }
 
         if(! is_null($limit)) {
