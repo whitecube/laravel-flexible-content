@@ -38,7 +38,7 @@ class LayoutsCollection extends Collection
      * @param string $key
      * @return \Whitecube\LaravelFlexibleContent\LayoutsCollection
      */
-    public function whereNotKey(string $key)
+    public function whereKeyNot(string $key)
     {
         return $this->filter(function($layout) use ($key) {
             return $layout->getKey() !== $key;
@@ -64,9 +64,9 @@ class LayoutsCollection extends Collection
      * @param array $keys
      * @return \Whitecube\LaravelFlexibleContent\LayoutsCollection
      */
-    public function whereNotKeyIn(array $keys)
+    public function whereKeyNotIn(array $keys)
     {
-        return $this->filter(function($layout) use ($key) {
+        return $this->filter(function($layout) use ($keys) {
             return ! in_array($layout->getKey(), $keys);
         });
     }

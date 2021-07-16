@@ -63,9 +63,9 @@ interface Flexible
      * @param array $attributes
      * @param null|int $index
      * @param null|string $id
-     * @return void
+     * @return $this
      */
-    public function insert(string $key, array $attributes = [], ?int $index = null, ?string $id = null);
+    public function insert(string $key, array $attributes = [], ?int $index = null, ?string $id = null) : Flexible;
 
     /**
      * Get all the inserted layout instances as a collection.

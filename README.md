@@ -8,6 +8,12 @@ Base library for repeated layout fields, content builders and other collection c
 - get all registered layouts
 - limiting layouts count (global & layout-specific)
 - inserting instances
+- get all inserted instances, and manipulate the LayoutCollection :
+    - `find($key)`
+    - `whereKey($key)`
+    - `whereKeyNot($key)`
+    - `whereKeyIn($key)`
+    - `whereKeyNotIn($key)`
 - counting instances
 
 ## Testing

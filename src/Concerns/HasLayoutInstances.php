@@ -54,9 +54,9 @@ trait HasLayoutInstances
      * @param array $attributes
      * @param null|int $index
      * @param null|string $id
-     * @return void
+     * @return $this
      */
-    public function insert(string $key, array $attributes = [], ?int $index = null, ?string $id = null)
+    public function insert(string $key, array $attributes = [], ?int $index = null, ?string $id = null) : Flexible
     {
         if(! ($layout = $this->getLayout($key))) {
             throw LayoutNotFoundException::make($key);
@@ -67,6 +67,8 @@ trait HasLayoutInstances
         (is_null($index) || $index >= $this->count())
             ? $this->instances()->push($instance)
             : $this->instances()->splice($index, 0, [$instance]);
+
+        return $this;
     }
 
     /**
