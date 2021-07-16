@@ -23,10 +23,10 @@ interface Layout
      * Define the amount of layouts of this kind that can be
      * instanciated in a Flexible container.
      *
-     * @param null|int $instances
+     * @param int $instances
      * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function limit(int $instances = null) : Layout;
+    public function limit(int $instances) : Layout;
 
     /**
      * Retrieve the amount of layouts of this kind that can be

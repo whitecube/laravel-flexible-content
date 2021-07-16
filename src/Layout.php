@@ -47,12 +47,12 @@ class Layout implements LayoutInterface
      * Define the amount of layouts of this kind that can be
      * instanciated in a Flexible container.
      *
-     * @param null|int $instances
+     * @param int $instances
      * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function limit(int $instances = null) : LayoutInterface
+    public function limit(int $instances = 1) : LayoutInterface
     {
-        $this->limit = $instances;
+        $this->limit = ($instances < 0) ? null : $instances;
 
         return $this;
     }
