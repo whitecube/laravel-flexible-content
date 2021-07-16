@@ -17,17 +17,13 @@ trait HasLayoutInstances
      * Prevent the Flexible container to instanciate more layouts
      * than the indicated amount.
      *
-     * @param bool|int $instances
+     * @param int $instances
      * @return $this
      */
-    public function limit($instances = 1) : Flexible
+    public function limit(int $instances = 1) : Flexible
     {
-        if(! $instances || $instances < 0) {
-            $this->limit = null;
-        } else {
-            $this->limit = is_int($instances) ? $instances : 1;
-        }
-        
+        $this->limit = ($instances < 0) ? null : $instances;
+
         return $this;
     }
 }
