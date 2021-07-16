@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Whitecube\LaravelFlexibleContent\Flexible;
+use Whitecube\LaravelFlexibleContent\Exceptions\InstanceNotInsertableException;
 use Tests\Fixtures\CustomLayout;
 
 it('can limit the whole flexible container\'s layout count', function() {
@@ -24,7 +25,8 @@ it('can limit the whole flexible container\'s layout count', function() {
     }
 
     expect($flexible->count())->toBe(1);
-    // TODO : expect exception to instance of...
+    expect($exception)->toBeInstanceOf(InstanceNotInsertableException::class);
+    expect($exception->getCode())->toBe(InstanceNotInsertableException::REASON_LIMIT);
 });
 
 it('can remove the whole flexible container\'s limit by providing a negative integer', function() {
@@ -66,7 +68,8 @@ it('can define a layout-specific limit from custom layout class', function() {
 
     expect($flexible->count('custom'))->toBe(1);
     expect($flexible->count())->toBe(2);
-    // TODO : expect exception to instance of...
+    expect($exception)->toBeInstanceOf(InstanceNotInsertableException::class);
+    expect($exception->getCode())->toBe(InstanceNotInsertableException::REASON_LAYOUT_LIMIT);
 });
 
 it('can override a layout-specific limit from custom layout class during registration', function() {
@@ -105,7 +108,8 @@ it('can set a layout-specific limit from closure registration', function() {
 
     expect($flexible->count('foo'))->toBe(1);
     expect($flexible->count())->toBe(2);
-    // TODO : expect exception to instance of...
+    expect($exception)->toBeInstanceOf(InstanceNotInsertableException::class);
+    expect($exception->getCode())->toBe(InstanceNotInsertableException::REASON_LAYOUT_LIMIT);
 });
 
 it('can override a layout-specific limit from closure during registration', function() {

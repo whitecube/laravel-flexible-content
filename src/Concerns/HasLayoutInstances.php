@@ -3,8 +3,10 @@
 namespace Whitecube\LaravelFlexibleContent\Concerns;
 
 use Whitecube\LaravelFlexibleContent\LayoutsCollection;
+use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 use Whitecube\LaravelFlexibleContent\Contracts\Flexible;
 use Whitecube\LaravelFlexibleContent\Exceptions\LayoutNotFoundException;
+use Whitecube\LaravelFlexibleContent\Exceptions\InstanceNotInsertableException;
 
 trait HasLayoutInstances
 {
@@ -64,11 +66,35 @@ trait HasLayoutInstances
 
         $instance = $layout->make($id, $attributes);
 
+        if(($reason = $this->canInsert($instance)) !== true) {
+            throw InstanceNotInsertableException::make($instance, $reason);
+        }
+
         (is_null($index) || $index >= $this->count())
             ? $this->instances()->push($instance)
             : $this->instances()->splice($index, 0, [$instance]);
 
         return $this;
+    }
+
+    /**
+     * Check if the given instance can be inserted or return the
+     * reason for refusal.
+     *
+     * @param \Whitecube\LaravelFlexibleContent\Contracts\Layout $instance
+     * @return bool|int
+     */
+    protected function canInsert(Layout $instance)
+    {
+        if(! is_null($limit = $this->getLimit()) && ($limit <= $this->count())) {
+            return InstanceNotInsertableException::REASON_LIMIT;
+        }
+
+        if(! is_null($limit = $instance->getLimit()) && ($limit <= $this->count($instance->getKey()))) {
+            return InstanceNotInsertableException::REASON_LAYOUT_LIMIT;
+        }
+
+        return true;
     }
 
     /**
