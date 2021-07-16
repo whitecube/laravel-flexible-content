@@ -1,0 +1,29 @@
+{
+    "name": "whitecube/laravel-flexible-content",
+    "description": "Base library for repeated layout fields, content builders and other collection components",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.0.0",
+        "laravel/framework": "^8.0"
+    },
+    "require-dev": {},
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Whitecube\\LaravelFlexibleContent\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Toon Van den Bos",
+            "email": "toon@whitecube.be"
+        }
+    ]
+}
