@@ -48,3 +48,13 @@ it('can unset layout attributes', function() {
     expect($layout->test)->toBeNull();
     expect($layout['something'])->toBeNull();
 });
+
+it('can convert layout attributes to array', function() {
+    $layout = (new Layout())->key('foo')->make(null, ['test' => true, 'something' => false]);
+
+    $converted = $layout->toArray();
+
+    expect($converted)->toBeArray();
+    expect($converted['test'])->toBeTrue();
+    expect($converted['something'])->toBeFalse();
+});

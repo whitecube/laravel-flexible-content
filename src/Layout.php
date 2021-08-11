@@ -4,11 +4,12 @@ namespace Whitecube\LaravelFlexibleContent;
 
 use ArrayAccess;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Whitecube\LaravelFlexibleContent\Contracts\Layout as LayoutInterface;
 
-class Layout implements LayoutInterface, ArrayAccess
+class Layout implements LayoutInterface, ArrayAccess, Arrayable
 {
     use HasAttributes;
     use HidesAttributes;
@@ -256,5 +257,15 @@ class Layout implements LayoutInterface, ArrayAccess
     public function offsetUnset($attribute)
     {
         unset($this->attributes[$attribute]);
+    }
+
+    /**
+     * Convert the layout instance to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->attributesToArray();
     }
 }
