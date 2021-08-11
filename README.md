@@ -17,8 +17,8 @@ This package's only purpose is to build custom repeated layout components, such 
     - `buildUsing($callback)`
     - `insert($key, $attributes, $index, $id)`
 - serializing the flexible container's state
-    - `serialize($resource, $attribute)`
-    - `serializeAs($format, $resource, $attribute)`
+    - `serialize()`
+    - `serializeAs($format)`
     - `serializeUsingFormat($format)`
     - `serializeUsing($callback)`
 - get all inserted instances, and manipulate the LayoutCollection :

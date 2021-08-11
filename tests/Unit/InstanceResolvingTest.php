@@ -168,4 +168,4 @@ it('can serialize instances using a custom callable', function() {
         });
 
     expect($flexible->serialize())->toBe('foo0,bar1,foo2');
-})->only();
+});
