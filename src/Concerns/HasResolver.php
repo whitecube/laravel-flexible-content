@@ -3,6 +3,8 @@
 namespace Whitecube\LaravelFlexibleContent\Concerns;
 
 use Illuminate\Support\Collection;
+use Whitecube\LaravelFlexibleContent\Contracts\Layout;
+use Whitecube\LaravelFlexibleContent\Exceptions\InvalidSerializationFormatException;
 
 trait HasResolver
 {
@@ -14,11 +16,19 @@ trait HasResolver
     public $buildCallback;
 
     /**
-     * The callback to be used to save the Flexible container's value.
+     * The callback to be used when saving the Flexible container's value.
      *
      * @var null|callable
      */
-    public $saveCallback;
+    public $serializeCallback;
+
+    /**
+     * The value serialization method.
+     * Available methods are: json, array, collection
+     *
+     * @var string
+     */
+    protected $serializeFormat = 'json';
 
     /**
      * Define the callback that should be used to setup the Flexible container's value.
@@ -34,14 +44,27 @@ trait HasResolver
     }
 
     /**
-     * Define the callback that should be used to save the Flexible container's value.
+     * Define the callback that should be used when saving the Flexible container's value.
      *
      * @param callable $saveCallback
      * @return $this
      */
-    public function saveUsing(callable $saveCallback)
+    public function serializeUsing(callable $serializeCallback)
     {
-        $this->saveCallback = $saveCallback;
+        $this->serializeCallback = $serializeCallback;
+
+        return $this;
+    }
+
+    /**
+     * Define a default serialization format method that should be used when saving the Flexible container's value.
+     *
+     * @param string $serializeFormat
+     * @return $this
+     */
+    public function serializeUsingFormat(string $serializeFormat)
+    {
+        $this->serializeFormat = $serializeFormat;
 
         return $this;
     }
@@ -111,11 +134,67 @@ trait HasResolver
     /**
      * Execute what has to be done in order to save the current value for next build.
      *
-     * @return $this
+     * @return mixed
      */
-    public function save()
+    public function serialize()
     {
-        // TODO.
-        return $this;
+        if(! is_null($this->serializeCallback)) {
+            return call_user_func($this->serializeCallback, $this);
+        }
+
+        return $this->serializeAs($this->serializeFormat);
+    }
+
+    /**
+     * Transform the current value in the desired format.
+     *
+     * @param string $format
+     * @return mixed
+     */
+    public function serializeAs(string $format)
+    {
+        $serializationMethod = 'serializeAs' . ucfirst($format);
+
+        if(! method_exists($this, $serializationMethod)) {
+            throw InvalidSerializationFormatException::make($format);
+        }
+
+        return $this->$serializationMethod();
+    }
+
+    /**
+     * Transform the current value into a serialized array.
+     *
+     * @return array
+     */
+    public function serializeAsArray()
+    {
+        return $this->instances()
+            ->map(fn(Layout $instance) => [
+                'key' => $instance->getKey(),
+                'id' => $instance->getId(),
+                'attributes' => $instance->getAttributes()
+            ])
+            ->all();
+    }
+
+    /**
+     * Transform the current value into a serialized JSON string.
+     *
+     * @return string
+     */
+    public function serializeAsJson()
+    {
+        return json_encode($this->serializeAsArray());
+    }
+
+    /**
+     * Transform the current value into a serialized collection.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function serializeAsCollection()
+    {
+        return collect($this->serializeAsArray());
     }
 }
