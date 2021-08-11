@@ -1,5 +1,6 @@
 # laravel-flexible-content
-Base library for repeated layout fields, content builders and other collection components
+
+This package's only purpose is to build custom repeated layout components, such as [Laravel Nova's Flexible Content field](https://github.com/whitecube/nova-flexible-content) or your own content builders and manageable component collections. It is meant to provide a tested and multi-purpose backend API that should be extended by specific components (regardless of their frontend stack).
 
 ## Docs (under construction)
 
