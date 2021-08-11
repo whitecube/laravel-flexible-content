@@ -2,13 +2,16 @@
 
 namespace Whitecube\LaravelFlexibleContent;
 
-use Whitecube\LaravelFlexibleContent\Contracts\Layout as LayoutInterface;
+use ArrayAccess;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
+use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
+use Whitecube\LaravelFlexibleContent\Contracts\Layout as LayoutInterface;
 
-class Layout implements LayoutInterface
+class Layout implements LayoutInterface, ArrayAccess
 {
     use HasAttributes;
+    use HidesAttributes;
 
     /**
      * A short unique name for this Layout, usually used by front-end components
@@ -133,5 +136,125 @@ class Layout implements LayoutInterface
             ->id($id ?? Str::uuid())
             ->attributes($attributes, true)
             ->limit($this->limit);
+    }
+
+    /**
+     * Get the value indicating whether the IDs are incrementing (they are not since this is not a model).
+     *
+     * @return bool
+     */
+    public function getIncrementing()
+    {
+        return false;
+    }
+
+    /**
+     * Determine if the layout uses timestamps (it doesn't since this is not a model).
+     *
+     * @return bool
+     */
+    public function usesTimestamps()
+    {
+        return false;
+    }
+
+    /**
+     * Check if relation exists (it doesn't since this is not a model).
+     *
+     * @return bool
+     */
+    protected function relationLoaded()
+    {
+        return false;
+    }
+
+    /**
+     * Dynamically retrieve attributes on the layout.
+     *
+     * @param string $attribute
+     * @return mixed
+     */
+    public function __get($attribute)
+    {
+        return $this->getAttribute($attribute);
+    }
+
+    /**
+     * Dynamically set attributes on the layout.
+     *
+     * @param string $attribute
+     * @param mixed $value
+     * @return void
+     */
+    public function __set($attribute, $value)
+    {
+        $this->setAttribute($attribute, $value);
+    }
+
+    /**
+     * Determine if an attribute exists on the layout.
+     *
+     * @param string $attribute
+     * @return bool
+     */
+    public function __isset($attribute)
+    {
+        return $this->offsetExists($attribute);
+    }
+
+    /**
+     * Unset an attribute on the layout.
+     *
+     * @param string $attribute
+     * @return void
+     */
+    public function __unset($attribute)
+    {
+        $this->offsetUnset($attribute);
+    }
+
+    /**
+     * Determine if the given attribute exists.
+     *
+     * @param mixed $attribute
+     * @return bool
+     */
+    public function offsetExists($attribute)
+    {
+        return ! is_null($this->getAttribute($attribute));
+    }
+
+    /**
+     * Get the value for a given offset.
+     *
+     * @param mixed $attribute
+     * @return mixed
+     */
+    public function offsetGet($attribute)
+    {
+        return $this->getAttribute($attribute);
+    }
+
+    /**
+     * Set the value for a given offset.
+     *
+     * @param mixed $attribute
+     * @param mixed $value
+     * @return void
+     */
+    public function offsetSet($attribute, $value)
+    {
+        $this->setAttribute($attribute, $value);
+    }
+
+    /**
+     * Unset the value for a given offset.
+     *
+     * @param mixed $attribute
+     * @return void
+     */
+    public function offsetUnset($attribute)
+    {
+        unset($this->attributes[$attribute]);
     }
 }
