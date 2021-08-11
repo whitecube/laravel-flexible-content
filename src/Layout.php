@@ -3,13 +3,14 @@
 namespace Whitecube\LaravelFlexibleContent;
 
 use ArrayAccess;
+use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Whitecube\LaravelFlexibleContent\Contracts\Layout as LayoutInterface;
 
-class Layout implements LayoutInterface, ArrayAccess, Arrayable
+class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayable
 {
     use HasAttributes;
     use HidesAttributes;
@@ -267,5 +268,20 @@ class Layout implements LayoutInterface, ArrayAccess, Arrayable
     public function toArray()
     {
         return $this->attributesToArray();
+    }
+
+    /**
+     * Transform layout for front-end serialization (AJAX requests usage). 
+     * This method should most probably be extended for proper exploitation.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'key' => $this->getKey(),
+            'id' => $this->getId(),
+            'limit' => $this->getLimit(),
+        ];
     }
 }

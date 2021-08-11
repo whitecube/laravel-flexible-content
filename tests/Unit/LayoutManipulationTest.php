@@ -58,3 +58,19 @@ it('can convert layout attributes to array', function() {
     expect($converted['test'])->toBeTrue();
     expect($converted['something'])->toBeFalse();
 });
+
+it('can convert layout to a JSON response object (for its frontend use)', function() {
+    $layout = (new Layout())->key('foo')->make(null, ['test' => true, 'something' => false]);
+
+    $converted = json_decode(json_encode($layout), true);
+
+    expect($converted)->toBeArray();
+    expect($converted['key'])->toBe('foo');
+    expect(array_key_exists('id', $converted))->toBeTrue();
+    expect(array_key_exists('limit', $converted))->toBeTrue();
+
+    // In this package, we do not include the layout's attributes in its JSON structure
+    // since they should probably be manipulated by the extending flexible container. It is 
+    // up to the developer to decide if attributes should be sent to the view.
+    expect(array_key_exists('attributes', $converted))->toBeFalse();
+});
