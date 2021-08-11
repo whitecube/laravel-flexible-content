@@ -19,4 +19,14 @@ class CustomLayout extends Layout
      * @var null|int
      **/
     protected $limit = 1;
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'test' => 'array',
+        'birthday' => 'date',
+    ];
 }

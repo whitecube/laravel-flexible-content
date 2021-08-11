@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use Carbon\Carbon;
+use Tests\Fixtures\CustomLayout;
 use Whitecube\LaravelFlexibleContent\Layout;
 
 it('can generate random uuid as layout ID and keep layout key', function() {
@@ -47,6 +49,16 @@ it('can unset layout attributes', function() {
 
     expect($layout->test)->toBeNull();
     expect($layout['something'])->toBeNull();
+});
+
+it('can cast layout attributes', function() {
+    $layout = (new CustomLayout())->make(null, [
+        'test' => json_encode(['foo' => 'bar']),
+        'birthday' => '1993-03-16'
+    ]);
+
+    expect($layout->test)->toBeArray();
+    expect($layout->birthday)->toBeInstanceOf(Carbon::class);
 });
 
 it('can convert layout attributes to array', function() {
