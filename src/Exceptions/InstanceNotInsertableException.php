@@ -7,6 +7,8 @@ use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 
 class InstanceNotInsertableException extends InvalidArgumentException
 {
+    use Concerns\HasExtendableCodes;
+
     /**
      * The main refusal reason codes.
      *
@@ -20,7 +22,7 @@ class InstanceNotInsertableException extends InvalidArgumentException
      *
      * @var array
      **/
-    static public $reasons = [
+    static public $codes = [
         1 => 'Limit reached',
         2 => 'Layout limit reached',
     ];
@@ -34,7 +36,7 @@ class InstanceNotInsertableException extends InvalidArgumentException
      */
     static public function make(Layout $instance, $code) : InvalidArgumentException
     {
-        $reason = static::$reasons[$code] ?? 'Unknown refusal reason';
+        $reason = static::getCodeMessage($code) ?? 'Unknown refusal reason';
 
         return new static($reason . ': Could not insert instance "' . $instance->getId() . '" with key "' . $instance->getKey() . '".', $code);
     }
