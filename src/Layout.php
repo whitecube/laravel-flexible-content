@@ -303,7 +303,22 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     }
 
     /**
+     * Convert the layout instance's state to an array that can be displayed in an user interface.
+     * It is intended to be extended and filled with the frontend component's required attributes.
+     *
+     * @return array
+     */
+    public function toDisplayableArray() : array
+    {
+        return [
+            'key' => $this->getKey(),
+            'id' => $this->getId(),
+        ];
+    }
+
+    /**
      * Convert the layout to an array that can be displayed in a user menu.
+     * It is intended to be extended and filled with the frontend component's required attributes.
      *
      * @return array
      */

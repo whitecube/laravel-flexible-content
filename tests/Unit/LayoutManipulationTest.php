@@ -82,6 +82,17 @@ it('can convert layout to a saveable array', function() {
     expect(array_key_exists('limit', $converted))->toBeFalse();
 });
 
+it('can convert layout to a displayable (UI) array', function() {
+    $layout = (new Layout())->key('foo')->limit(5)->make(null, ['test' => true, 'something' => false]);
+
+    $converted = $layout->toDisplayableArray();
+
+    expect(array_key_exists('key', $converted))->toBeTrue();
+    expect(array_key_exists('id', $converted))->toBeTrue();
+    expect(array_key_exists('attributes', $converted))->toBeFalse();
+    expect(array_key_exists('limit', $converted))->toBeFalse();
+});
+
 it('can convert layout to a displayable (menu) array', function() {
     $layout = (new Layout())->key('foo')->limit(5)->make(null, ['test' => true, 'something' => false]);
 

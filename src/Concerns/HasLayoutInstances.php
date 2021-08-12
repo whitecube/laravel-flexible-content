@@ -114,6 +114,19 @@ trait HasLayoutInstances
     }
 
     /**
+     * Get all the inserted layout instances serialized for display in a user interface.
+     *
+     * @return array
+     */
+    public function instancesValues() : array
+    {
+        return $this->instances()
+            ->map(fn(Layout $instance) => $instance->toDisplayableArray())
+            ->values()
+            ->all();
+    }
+
+    /**
      * Get the amount of inserted layout instances, total or per layout key.
      *
      * @param null|string $key

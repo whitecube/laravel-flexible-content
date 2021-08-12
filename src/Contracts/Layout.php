@@ -94,7 +94,16 @@ interface Layout
     public function toSerializableArray() : array;
 
     /**
+     * Convert the layout instance's state to an array that can be displayed in an user interface.
+     * It is intended to be extended and filled with the frontend component's required attributes.
+     *
+     * @return array
+     */
+    public function toDisplayableArray() : array;
+
+    /**
      * Convert the layout to an array that can be displayed in a user menu.
+     * It is intended to be extended and filled with the frontend component's required attributes.
      *
      * @return array
      */

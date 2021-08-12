@@ -24,6 +24,7 @@ This package's only purpose is to build custom repeated layout components, such 
     - `serializeUsing($callback)`
 - get all inserted instances, and manipulate the LayoutCollection :
     - `instances()`
+    - `instancesValues()`
     - `$instances->find($key)`
     - `$instances->whereKey($key)`
     - `$instances->whereKeyNot($key)`
