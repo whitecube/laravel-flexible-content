@@ -40,6 +40,13 @@ interface Flexible
     public function layouts() : LayoutsCollection;
 
     /**
+     * Get all the defined layouts serialized for display in a menu.
+     *
+     * @return array
+     */
+    public function layoutsMenu() : array;
+
+    /**
      * Prevent the Flexible container to instanciate more layouts
      * than the indicated amount.
      *

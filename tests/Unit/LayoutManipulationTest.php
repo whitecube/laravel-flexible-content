@@ -71,7 +71,29 @@ it('can convert layout attributes to array', function() {
     expect($converted['something'])->toBeFalse();
 });
 
-it('can convert layout to a JSON response object (for its frontend use)', function() {
+it('can convert layout to a saveable array', function() {
+    $layout = (new Layout())->key('foo')->limit(5)->make(null, ['test' => true, 'something' => false]);
+
+    $converted = $layout->toSerializableArray();
+
+    expect(array_key_exists('key', $converted))->toBeTrue();
+    expect(array_key_exists('id', $converted))->toBeTrue();
+    expect(array_key_exists('attributes', $converted))->toBeTrue();
+    expect(array_key_exists('limit', $converted))->toBeFalse();
+});
+
+it('can convert layout to a displayable (menu) array', function() {
+    $layout = (new Layout())->key('foo')->limit(5)->make(null, ['test' => true, 'something' => false]);
+
+    $converted = $layout->toButtonArray();
+
+    expect(array_key_exists('key', $converted))->toBeTrue();
+    expect(array_key_exists('id', $converted))->toBeFalse();
+    expect(array_key_exists('attributes', $converted))->toBeFalse();
+    expect(array_key_exists('limit', $converted))->toBeTrue();
+});
+
+it('can convert layout to a JSON response object', function() {
     $layout = (new Layout())->key('foo')->make(null, ['test' => true, 'something' => false]);
 
     $converted = json_decode(json_encode($layout), true);
@@ -80,9 +102,5 @@ it('can convert layout to a JSON response object (for its frontend use)', functi
     expect($converted['key'])->toBe('foo');
     expect(array_key_exists('id', $converted))->toBeTrue();
     expect(array_key_exists('limit', $converted))->toBeTrue();
-
-    // In this package, we do not include the layout's attributes in its JSON structure
-    // since they should probably be manipulated by the extending flexible container. It is 
-    // up to the developer to decide if attributes should be sent to the view.
-    expect(array_key_exists('attributes', $converted))->toBeFalse();
+    expect(array_key_exists('attributes', $converted))->toBeTrue();
 });

@@ -9,6 +9,7 @@ This package's only purpose is to build custom repeated layout components, such 
     - `register($layout, $limit)`
 - get all registered layouts
     - `layouts()`
+    - `layoutsMenu()`
 - limiting layouts
     - `limit($instances)`
     - `$layout->limit($instances)`

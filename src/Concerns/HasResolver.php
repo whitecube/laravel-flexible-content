@@ -170,11 +170,7 @@ trait HasResolver
     public function serializeAsArray()
     {
         return $this->instances()
-            ->map(fn(Layout $instance) => [
-                'key' => $instance->getKey(),
-                'id' => $instance->getId(),
-                'attributes' => $instance->getAttributes()
-            ])
+            ->map(fn(Layout $instance) => $instance->toSerializableArray())
             ->all();
     }
 

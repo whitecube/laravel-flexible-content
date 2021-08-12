@@ -89,4 +89,17 @@ trait HasLayouts
 
         return $this->layouts;
     }
+
+    /**
+     * Get all the defined layouts serialized for display in a menu.
+     *
+     * @return array
+     */
+    public function layoutsMenu() : array
+    {
+        return $this->layouts()
+            ->map(fn(Layout $layout) => $layout->toButtonArray())
+            ->values()
+            ->all();
+    }
 }

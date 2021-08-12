@@ -85,4 +85,18 @@ interface Layout
      * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
     public function make(?string $id = null, array $attributes = []) : Layout;
+
+    /**
+     * Convert the layout instance's state to an array that can be saved.
+     *
+     * @return array
+     */
+    public function toSerializableArray() : array;
+
+    /**
+     * Convert the layout to an array that can be displayed in a user menu.
+     *
+     * @return array
+     */
+    public function toButtonArray() : array;
 }

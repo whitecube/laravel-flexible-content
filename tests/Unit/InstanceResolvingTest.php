@@ -98,9 +98,12 @@ it('can serialize instances into an array', function() {
     expect($serialized)->toBeArray();
 
     foreach (['foo', 'bar', 'foo'] as $index => $key) {
-        expect($serialized[$index]['key'] ?? null)->toBe($key);
-        expect($serialized[$index]['id'] ?? null)->toBeString();
-        expect($serialized[$index]['attributes']['test'] ?? null)->toBe($index);
+        $item = $serialized[$index];
+
+        expect($item['key'] ?? null)->toBe($key);
+        expect($item['id'] ?? null)->toBeString();
+        expect($item['attributes']['test'] ?? null)->toBe($index);
+        expect(array_key_exists('limit', $item))->toBeFalse();
     }
 });
 
@@ -117,9 +120,12 @@ it('can serialize instances into a JSON string', function() {
     expect($serialized = json_decode($serialized, true))->toBeArray();
 
     foreach (['foo', 'bar', 'foo'] as $index => $key) {
-        expect($serialized[$index]['key'] ?? null)->toBe($key);
-        expect($serialized[$index]['id'] ?? null)->toBeString();
-        expect($serialized[$index]['attributes']['test'] ?? null)->toBe($index);
+        $item = $serialized[$index];
+
+        expect($item['key'] ?? null)->toBe($key);
+        expect($item['id'] ?? null)->toBeString();
+        expect($item['attributes']['test'] ?? null)->toBe($index);
+        expect(array_key_exists('limit', $item))->toBeFalse();
     }
 });
 
@@ -135,9 +141,12 @@ it('can serialize instances into a collection', function() {
     expect($serialized)->toBeInstanceOf(Collection::class);
 
     foreach (['foo', 'bar', 'foo'] as $index => $key) {
-        expect($serialized->get($index)['key'] ?? null)->toBe($key);
-        expect($serialized->get($index)['id'] ?? null)->toBeString();
-        expect($serialized->get($index)['attributes']['test'] ?? null)->toBe($index);
+        $item = $serialized->get($index);
+
+        expect($item['key'] ?? null)->toBe($key);
+        expect($item['id'] ?? null)->toBeString();
+        expect($item['attributes']['test'] ?? null)->toBe($index);
+        expect(array_key_exists('limit', $item))->toBeFalse();
     }
 });
 

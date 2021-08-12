@@ -289,17 +289,42 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     }
 
     /**
+     * Convert the layout instance's state to an array that can be saved.
+     *
+     * @return array
+     */
+    public function toSerializableArray() : array
+    {
+        return [
+            'key' => $this->getKey(),
+            'id' => $this->getId(),
+            'attributes' => $this->getAttributes(),
+        ];
+    }
+
+    /**
+     * Convert the layout to an array that can be displayed in a user menu.
+     *
+     * @return array
+     */
+    public function toButtonArray() : array
+    {
+        return [
+            'key' => $this->getKey(),
+            'limit' => $this->getLimit(),
+        ];
+    }
+
+    /**
      * Transform layout for front-end serialization (AJAX requests usage). 
-     * This method should most probably be extended for proper exploitation.
      *
      * @return array
      */
     public function jsonSerialize()
     {
-        return [
-            'key' => $this->getKey(),
-            'id' => $this->getId(),
-            'limit' => $this->getLimit(),
-        ];
+        return array_merge(
+            $this->toButtonArray(),
+            $this->toSerializableArray()
+        );
     }
 }

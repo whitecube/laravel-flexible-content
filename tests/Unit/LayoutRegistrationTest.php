@@ -87,3 +87,16 @@ it('can return all registered layouts as a LayoutsCollection', function() {
     expect($collection)->toBeInstanceOf(LayoutsCollection::class);
     expect($collection->keys()->implode(','))->toBe('foo,bar');
 });
+
+it('can return all registered layouts as a "menu" array', function() {
+    $flexible = (new Flexible())
+        ->register(fn ($layout) => $layout->key('foo')->limit(3))
+        ->register(fn ($layout) => $layout->key('bar')->limit(4));
+
+    $menu = $flexible->layoutsMenu();
+
+    expect($menu)->toBeArray();
+    expect($menu)->toHaveCount(2);
+    expect(array_key_exists('id', $menu[0]))->toBeFalse();
+    expect(array_key_exists('limit', $menu[0]))->toBeTrue();
+});
