@@ -2,6 +2,8 @@
 
 namespace Whitecube\LaravelFlexibleContent\Contracts;
 
+use Whitecube\LaravelFlexibleContent\Contracts\Flexible;
+
 interface Layout
 {
     /**
@@ -66,6 +68,15 @@ interface Layout
      * @return array
      */
     public function getAttributes();
+
+    /**
+     * Check if the current layout can be inserted in the provided flexible container.
+     * If not insertable, it is recommended to return an error code (int).
+     *
+     * @param \Whitecube\LaravelFlexibleContent\Contracts\Flexible $container
+     * @return bool|int
+     */
+    public function isInsertable(Flexible $container);
 
     /**
      * Create a layout instance from this layout.

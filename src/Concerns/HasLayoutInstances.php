@@ -90,8 +90,10 @@ trait HasLayoutInstances
             return InstanceNotInsertableException::REASON_LIMIT;
         }
 
-        if(! is_null($limit = $instance->getLimit()) && ($limit <= $this->count($instance->getKey()))) {
-            return InstanceNotInsertableException::REASON_LAYOUT_LIMIT;
+        $code = $instance->isInsertable($this);
+
+        if(is_int($code) || $code === false) {
+            return $code ?: 0;
         }
 
         return true;

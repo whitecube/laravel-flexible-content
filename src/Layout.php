@@ -9,6 +9,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Whitecube\LaravelFlexibleContent\Contracts\Layout as LayoutInterface;
+use Whitecube\LaravelFlexibleContent\Contracts\Flexible as FlexibleInterface;
+use Whitecube\LaravelFlexibleContent\Exceptions\InstanceNotInsertableException;
 
 class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayable
 {
@@ -123,6 +125,22 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
         $this->setRawAttributes($attributes, $syncOriginal);
 
         return $this;
+    }
+
+    /**
+     * Check if the current layout can be inserted in the provided flexible container.
+     * If not insertable, it is recommended to return an error code (int).
+     *
+     * @param \Whitecube\LaravelFlexibleContent\Contracts\Flexible $container
+     * @return bool|int
+     */
+    public function isInsertable(FlexibleInterface $container)
+    {
+        if(! is_null($limit = $this->getLimit()) && ($limit <= $container->count($this->getKey()))) {
+            return InstanceNotInsertableException::REASON_LAYOUT_LIMIT;
+        }
+
+        return true;
     }
 
     /**
