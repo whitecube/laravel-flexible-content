@@ -146,7 +146,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Create a layout instance from this layout.
      *
-     * @param int $instances
+     * @param null|string $id
+     * @param array $attributes
      * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
     public function make(?string $id = null, array $attributes = []) : LayoutInterface
