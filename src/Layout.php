@@ -240,7 +240,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
      * @param mixed $attribute
      * @return bool
      */
-    public function offsetExists($attribute)
+    public function offsetExists(mixed $attribute): bool
     {
         return ! is_null($this->getAttribute($attribute));
     }
@@ -251,7 +251,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
      * @param mixed $attribute
      * @return mixed
      */
-    public function offsetGet($attribute)
+    public function offsetGet(mixed $attribute): mixed
     {
         return $this->getAttribute($attribute);
     }
@@ -263,7 +263,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
      * @param mixed $value
      * @return void
      */
-    public function offsetSet($attribute, $value)
+    public function offsetSet($attribute, $value): void
     {
         $this->setAttribute($attribute, $value);
     }
@@ -274,7 +274,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
      * @param mixed $attribute
      * @return void
      */
-    public function offsetUnset($attribute)
+    public function offsetUnset($attribute): void
     {
         unset($this->attributes[$attribute]);
     }
