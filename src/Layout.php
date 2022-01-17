@@ -332,11 +332,11 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     }
 
     /**
-     * Transform layout for front-end serialization (AJAX requests usage). 
+     * Transform layout for front-end serialization (AJAX requests usage).
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_merge(
             $this->toButtonArray(),
