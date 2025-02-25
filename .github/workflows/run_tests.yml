@@ -35,6 +35,7 @@ jobs:
 
             -   name: Install dependencies
                 run: |
+                    rm composer.lock
                     composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction
                     composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
