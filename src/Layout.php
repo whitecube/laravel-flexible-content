@@ -3,19 +3,26 @@
 namespace Whitecube\LaravelFlexibleContent;
 
 use ArrayAccess;
-use JsonSerializable;
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
-use Whitecube\LaravelFlexibleContent\Contracts\Layout as LayoutInterface;
+use Illuminate\Support\Str;
+use JsonSerializable;
 use Whitecube\LaravelFlexibleContent\Contracts\Flexible as FlexibleInterface;
+use Whitecube\LaravelFlexibleContent\Contracts\Layout as LayoutInterface;
 use Whitecube\LaravelFlexibleContent\Exceptions\InstanceNotInsertableException;
 
-class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayable
+class Layout implements Arrayable, ArrayAccess, JsonSerializable, LayoutInterface
 {
     use HasAttributes;
     use HidesAttributes;
+
+    /**
+     * Indicates if the model exists.
+     *
+     * @var bool
+     */
+    public $exists = false;
 
     /**
      * A short unique name for this Layout, usually used by front-end components
@@ -40,11 +47,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
 
     /**
      * Define the layout's unique key (layout name).
-     *
-     * @param string $key
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function key(string $key) : LayoutInterface
+    public function key(string $key): LayoutInterface
     {
         $this->key = trim($key);
 
@@ -53,23 +57,18 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
 
     /**
      * Retrieve the layout's unique key.
-     *
-     * @return null|string
      */
-    public function getKey() : ?string
+    public function getKey(): ?string
     {
         return $this->key;
     }
 
     /**
      * Define the layout instance's unique and immutable identifier.
-     *
-     * @param string $id
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function id(string $id) : LayoutInterface
+    public function id(string $id): LayoutInterface
     {
-        if(! is_null($this->id)) {
+        if (! is_null($this->id)) {
             return $this;
         }
 
@@ -80,10 +79,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
 
     /**
      * Retrieve the layout instance's unique identifier.
-     *
-     * @return null|string
      */
-    public function getId() : ?string
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -91,11 +88,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Define the amount of layouts of this kind that can be
      * instanciated in a Flexible container.
-     *
-     * @param null|int $instances
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function limit(?int $instances = 1) : LayoutInterface
+    public function limit(?int $instances = 1): LayoutInterface
     {
         $this->limit = (($instances ?? -1) < 0) ? null : $instances;
 
@@ -105,10 +99,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Retrieve the amount of layouts of this kind that can be
      * instanciated in a Flexible container.
-     *
-     * @return null|int
      */
-    public function getLimit() : ?int
+    public function getLimit(): ?int
     {
         return $this->limit;
     }
@@ -116,9 +108,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Set the array of layout instance attributes. No checking is done.
      *
-     * @param array $attributes
-     * @param bool $syncOriginal
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
+     * @param  bool  $syncOriginal
      */
     public function attributes(array $attributes, $syncOriginal = false): LayoutInterface
     {
@@ -131,12 +121,11 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
      * Check if the current layout can be inserted in the provided flexible container.
      * If not insertable, it is recommended to return an error code (int).
      *
-     * @param \Whitecube\LaravelFlexibleContent\Contracts\Flexible $container
      * @return bool|int
      */
     public function isInsertable(FlexibleInterface $container)
     {
-        if(! is_null($limit = $this->getLimit()) && ($limit <= $container->count($this->getKey()))) {
+        if (! is_null($limit = $this->getLimit()) && ($limit <= $container->count($this->getKey()))) {
             return InstanceNotInsertableException::REASON_LAYOUT_LIMIT;
         }
 
@@ -145,14 +134,10 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
 
     /**
      * Create a layout instance from this layout.
-     *
-     * @param null|string $id
-     * @param array $attributes
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function make(?string $id = null, array $attributes = []) : LayoutInterface
+    public function make(?string $id = null, array $attributes = []): LayoutInterface
     {
-        return (new static())
+        return (new static)
             ->key($this->key)
             ->id($id ?? Str::uuid())
             ->attributes($attributes, true)
@@ -192,7 +177,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Dynamically retrieve attributes on the layout.
      *
-     * @param string $attribute
+     * @param  string  $attribute
      * @return mixed
      */
     public function __get($attribute)
@@ -203,8 +188,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Dynamically set attributes on the layout.
      *
-     * @param string $attribute
-     * @param mixed $value
+     * @param  string  $attribute
+     * @param  mixed  $value
      * @return void
      */
     public function __set($attribute, $value)
@@ -215,7 +200,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Determine if an attribute exists on the layout.
      *
-     * @param string $attribute
+     * @param  string  $attribute
      * @return bool
      */
     public function __isset($attribute)
@@ -226,7 +211,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Unset an attribute on the layout.
      *
-     * @param string $attribute
+     * @param  string  $attribute
      * @return void
      */
     public function __unset($attribute)
@@ -236,9 +221,6 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
 
     /**
      * Determine if the given attribute exists.
-     *
-     * @param mixed $attribute
-     * @return bool
      */
     public function offsetExists(mixed $attribute): bool
     {
@@ -247,9 +229,6 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
 
     /**
      * Get the value for a given offset.
-     *
-     * @param mixed $attribute
-     * @return mixed
      */
     public function offsetGet(mixed $attribute): mixed
     {
@@ -259,9 +238,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Set the value for a given offset.
      *
-     * @param mixed $attribute
-     * @param mixed $value
-     * @return void
+     * @param  mixed  $attribute
+     * @param  mixed  $value
      */
     public function offsetSet($attribute, $value): void
     {
@@ -271,8 +249,7 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Unset the value for a given offset.
      *
-     * @param mixed $attribute
-     * @return void
+     * @param  mixed  $attribute
      */
     public function offsetUnset($attribute): void
     {
@@ -291,10 +268,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
 
     /**
      * Convert the layout instance's state to an array that can be saved.
-     *
-     * @return array
      */
-    public function toSerializableArray() : array
+    public function toSerializableArray(): array
     {
         return [
             'key' => $this->getKey(),
@@ -306,10 +281,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Convert the layout instance's state to an array that can be displayed in an user interface.
      * It is intended to be extended and filled with the frontend component's required attributes.
-     *
-     * @return array
      */
-    public function toDisplayableArray() : array
+    public function toDisplayableArray(): array
     {
         return [
             'key' => $this->getKey(),
@@ -320,10 +293,8 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     /**
      * Convert the layout to an array that can be displayed in a user menu.
      * It is intended to be extended and filled with the frontend component's required attributes.
-     *
-     * @return array
      */
-    public function toButtonArray() : array
+    public function toButtonArray(): array
     {
         return [
             'key' => $this->getKey(),
@@ -332,9 +303,27 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     }
 
     /**
+     * This method is called by the HasAttributes trait, and is usually
+     * defined on a model class. In this case, we don't need to handle
+     * it, but we do need to have the method to avoid errors.
+     */
+    public function relationResolver($classname, $key)
+    {
+        return false;
+    }
+
+    /**
+     * This method is called by the HasAttributes trait, and is usually
+     * defined on a model class. In this case, we don't need to handle
+     * it, but we do need to have the method to avoid errors.
+     */
+    public function preventsAccessingMissingAttributes()
+    {
+        return false;
+    }
+
+    /**
      * Transform layout for front-end serialization (AJAX requests usage).
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {

@@ -2,11 +2,11 @@
 
 namespace Whitecube\LaravelFlexibleContent\Concerns;
 
-use Whitecube\LaravelFlexibleContent\LayoutsCollection;
-use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 use Whitecube\LaravelFlexibleContent\Contracts\Flexible;
-use Whitecube\LaravelFlexibleContent\Exceptions\LayoutNotFoundException;
+use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 use Whitecube\LaravelFlexibleContent\Exceptions\InstanceNotInsertableException;
+use Whitecube\LaravelFlexibleContent\Exceptions\LayoutNotFoundException;
+use Whitecube\LaravelFlexibleContent\LayoutsCollection;
 
 trait HasLayoutInstances
 {
@@ -28,10 +28,9 @@ trait HasLayoutInstances
      * Prevent the Flexible container to instanciate more layouts
      * than the indicated amount.
      *
-     * @param null|int $instances
      * @return $this
      */
-    public function limit(?int $instances = 1) : Flexible
+    public function limit(?int $instances = 1): Flexible
     {
         $this->limit = (($instances ?? -1) < 0) ? null : $instances;
 
@@ -39,12 +38,10 @@ trait HasLayoutInstances
     }
 
     /**
-     * Retrieve the amount of layouts that can be instanciated in 
+     * Retrieve the amount of layouts that can be instanciated in
      * this Flexible container.
-     *
-     * @return null|int
      */
-    public function getLimit() : ?int
+    public function getLimit(): ?int
     {
         return $this->limit;
     }
@@ -52,21 +49,17 @@ trait HasLayoutInstances
     /**
      * Add a layout instance to the Flexible container.
      *
-     * @param string $key
-     * @param array $attributes
-     * @param null|int $index
-     * @param null|string $id
      * @return $this
      */
-    public function insert(string $key, array $attributes = [], ?int $index = null, ?string $id = null) : Flexible
+    public function insert(string $key, array $attributes = [], ?int $index = null, ?string $id = null): Flexible
     {
-        if(! ($layout = $this->getLayout($key))) {
+        if (! ($layout = $this->getLayout($key))) {
             throw LayoutNotFoundException::make($key);
         }
 
         $instance = $layout->make($id, $attributes);
 
-        if(($reason = $this->canInsert($instance)) !== true) {
+        if (($reason = $this->canInsert($instance)) !== true) {
             throw InstanceNotInsertableException::make($instance, $reason);
         }
 
@@ -81,18 +74,17 @@ trait HasLayoutInstances
      * Check if the given instance can be inserted or return the
      * reason for refusal.
      *
-     * @param \Whitecube\LaravelFlexibleContent\Contracts\Layout $instance
      * @return bool|int
      */
     protected function canInsert(Layout $instance)
     {
-        if(! is_null($limit = $this->getLimit()) && ($limit <= $this->count())) {
+        if (! is_null($limit = $this->getLimit()) && ($limit <= $this->count())) {
             return InstanceNotInsertableException::REASON_LIMIT;
         }
 
         $code = $instance->isInsertable($this);
 
-        if(is_int($code) || $code === false) {
+        if (is_int($code) || $code === false) {
             return $code ?: 0;
         }
 
@@ -101,13 +93,11 @@ trait HasLayoutInstances
 
     /**
      * Get all the inserted layout instances as a collection.
-     *
-     * @return \Whitecube\LaravelFlexibleContent\LayoutsCollection
      */
-    public function instances() : LayoutsCollection
+    public function instances(): LayoutsCollection
     {
-        if(! $this->instances) {
-            $this->instances = new LayoutsCollection();
+        if (! $this->instances) {
+            $this->instances = new LayoutsCollection;
         }
 
         return $this->instances;
@@ -115,26 +105,21 @@ trait HasLayoutInstances
 
     /**
      * Get all the inserted layout instances serialized for display in a user interface.
-     *
-     * @return array
      */
-    public function instancesValues() : array
+    public function instancesValues(): array
     {
         return $this->instances()
-            ->map(fn(Layout $instance) => $instance->toDisplayableArray())
+            ->map(fn (Layout $instance) => $instance->toDisplayableArray())
             ->values()
             ->all();
     }
 
     /**
      * Get the amount of inserted layout instances, total or per layout key.
-     *
-     * @param null|string $key
-     * @return int
      */
-    public function count(?string $key = null)
+    public function count(?string $key = null): int
     {
-        if(! $this->instances) {
+        if (! $this->instances) {
             return 0;
         }
 

@@ -2,12 +2,12 @@
 
 namespace Tests\Unit;
 
-use Whitecube\LaravelFlexibleContent\Flexible;
-use Whitecube\LaravelFlexibleContent\Exceptions\InstanceNotInsertableException;
 use Tests\Fixtures\CustomLayout;
+use Whitecube\LaravelFlexibleContent\Exceptions\InstanceNotInsertableException;
+use Whitecube\LaravelFlexibleContent\Flexible;
 
-it('can limit the whole flexible container\'s layout count', function() {
-    $flexible = (new Flexible())->register(fn ($layout) => $layout->key('foo'));
+it('can limit the whole flexible container\'s layout count', function () {
+    $flexible = (new Flexible)->register(fn ($layout) => $layout->key('foo'));
 
     expect($flexible->getLimit())->toBeNull();
 
@@ -29,8 +29,8 @@ it('can limit the whole flexible container\'s layout count', function() {
     expect($exception->getCode())->toBe(InstanceNotInsertableException::REASON_LIMIT);
 });
 
-it('can remove the whole flexible container\'s limit by providing a negative integer', function() {
-    $flexible = (new Flexible())
+it('can remove the whole flexible container\'s limit by providing a negative integer', function () {
+    $flexible = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->limit(1);
 
@@ -47,10 +47,10 @@ it('can remove the whole flexible container\'s limit by providing a negative int
     expect($flexible->count())->toBe(2);
 });
 
-it('can define a layout-specific limit from custom layout class', function() {
-    $layout = new CustomLayout();
+it('can define a layout-specific limit from custom layout class', function () {
+    $layout = new CustomLayout;
 
-    $flexible = (new Flexible())
+    $flexible = (new Flexible)
         ->register($layout)
         ->register(fn ($layout) => $layout->key('foo'));
 
@@ -72,10 +72,10 @@ it('can define a layout-specific limit from custom layout class', function() {
     expect($exception->getCode())->toBe(InstanceNotInsertableException::REASON_LAYOUT_LIMIT);
 });
 
-it('can override a layout-specific limit from custom layout class during registration', function() {
-    $layout = new CustomLayout();
+it('can override a layout-specific limit from custom layout class during registration', function () {
+    $layout = new CustomLayout;
 
-    $flexible = (new Flexible())->register($layout, -1);
+    $flexible = (new Flexible)->register($layout, -1);
 
     expect($layout->getLimit())->toBeNull();
 
@@ -85,11 +85,11 @@ it('can override a layout-specific limit from custom layout class during registr
     expect($flexible->count('custom'))->toBe(2);
 });
 
-it('can set a layout-specific limit from closure registration', function() {
+it('can set a layout-specific limit from closure registration', function () {
     $layout = null;
 
-    $flexible = (new Flexible())
-        ->register(function($default) use (&$layout) {
+    $flexible = (new Flexible)
+        ->register(function ($default) use (&$layout) {
             $layout = $default->key('foo')->limit(1);
         })
         ->register(fn ($layout) => $layout->key('bar'));
@@ -112,13 +112,13 @@ it('can set a layout-specific limit from closure registration', function() {
     expect($exception->getCode())->toBe(InstanceNotInsertableException::REASON_LAYOUT_LIMIT);
 });
 
-it('can override a layout-specific limit from closure during registration', function() {
+it('can override a layout-specific limit from closure during registration', function () {
     $layout = null;
 
-    $flexible = (new Flexible())->register(function($default) use (&$layout) {
+    $flexible = (new Flexible)->register(function ($default) use (&$layout) {
         $layout = $default->key('foo')->limit(1);
     }, -1);
-    
+
     expect($layout->getLimit())->toBeNull();
 
     $flexible->insert('foo');

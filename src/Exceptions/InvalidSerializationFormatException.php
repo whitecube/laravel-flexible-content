@@ -9,11 +9,10 @@ class InvalidSerializationFormatException extends InvalidArgumentException
     /**
      * Create a new exception instance with given arguments
      *
-     * @param string $format
-     * @return \InvalidArgumentException
+     * @param  string  $format
      */
-    static public function make($format) : InvalidArgumentException
+    public static function make($format): InvalidArgumentException
     {
-        return new static('Could not save flexible as "' . $format . '": method "serializeAs' . ucfirst($format) . '" is undefined.');
+        return new static('Could not save flexible as "'.$format.'": method "serializeAs'.ucfirst($format).'" is undefined.');
     }
 }
