@@ -33,7 +33,6 @@ trait HasResolver
     /**
      * Define the callback that should be used to setup the Flexible container's value.
      *
-     * @param callable $buildCallback
      * @return $this
      */
     public function buildUsing(callable $buildCallback)
@@ -46,7 +45,7 @@ trait HasResolver
     /**
      * Define the callback that should be used when saving the Flexible container's value.
      *
-     * @param callable $saveCallback
+     * @param  callable  $saveCallback
      * @return $this
      */
     public function serializeUsing(callable $serializeCallback)
@@ -59,7 +58,6 @@ trait HasResolver
     /**
      * Define a default serialization format method that should be used when saving the Flexible container's value.
      *
-     * @param string $serializeFormat
      * @return $this
      */
     public function serializeUsingFormat(string $serializeFormat)
@@ -72,13 +70,14 @@ trait HasResolver
     /**
      * Create the Flexible container's base layout instances.
      *
-     * @param mixed $data
+     * @param  mixed  $data
      * @return $this
      */
     public function build($data = null)
     {
-        if(! is_null($this->buildCallback)) {
+        if (! is_null($this->buildCallback)) {
             call_user_func($this->buildCallback, $this, $data);
+
             return $this;
         }
 
@@ -88,18 +87,18 @@ trait HasResolver
     /**
      * Create the Flexible container's base layout instances from given value.
      *
-     * @param mixed $data
+     * @param  mixed  $data
      * @return $this
      */
     public function buildFromData($data = null)
     {
-        if($data instanceof Collection) {
+        if ($data instanceof Collection) {
             $data = $data->toArray();
-        } else if (is_string($data)) {
+        } elseif (is_string($data)) {
             $data = json_decode($data, true) ?? [];
         }
 
-        if(! $data || ! is_array($data)) {
+        if (! $data || ! is_array($data)) {
             return $this;
         }
 
@@ -113,12 +112,12 @@ trait HasResolver
     /**
      * Attempt to insert a single instance from serialized value.
      *
-     * @param mixed $item
+     * @param  mixed  $item
      * @return $this
      */
     public function buildItem($item)
     {
-        if(! is_array($item) && ! is_object($item)) {
+        if (! is_array($item) && ! is_object($item)) {
             return $this;
         }
 
@@ -138,7 +137,7 @@ trait HasResolver
      */
     public function serialize()
     {
-        if(! is_null($this->serializeCallback)) {
+        if (! is_null($this->serializeCallback)) {
             return call_user_func($this->serializeCallback, $this);
         }
 
@@ -148,14 +147,13 @@ trait HasResolver
     /**
      * Transform the current value in the desired format.
      *
-     * @param string $format
      * @return mixed
      */
     public function serializeAs(string $format)
     {
-        $serializationMethod = 'serializeAs' . ucfirst($format);
+        $serializationMethod = 'serializeAs'.ucfirst($format);
 
-        if(! method_exists($this, $serializationMethod)) {
+        if (! method_exists($this, $serializationMethod)) {
             throw InvalidSerializationFormatException::make($format);
         }
 
@@ -170,7 +168,7 @@ trait HasResolver
     public function serializeAsArray()
     {
         return $this->instances()
-            ->map(fn(Layout $instance) => $instance->toSerializableArray())
+            ->map(fn (Layout $instance) => $instance->toSerializableArray())
             ->all();
     }
 

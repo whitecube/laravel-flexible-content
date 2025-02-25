@@ -2,65 +2,46 @@
 
 namespace Whitecube\LaravelFlexibleContent\Contracts;
 
-use Whitecube\LaravelFlexibleContent\Contracts\Flexible;
-
 interface Layout
 {
     /**
      * Define the layout's unique key (layout name).
-     *
-     * @param string $key
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function key(string $key) : Layout;
+    public function key(string $key): Layout;
 
     /**
      * Retrieve the layout's unique key.
-     *
-     * @return null|string
      */
-    public function getKey() : ?string;
+    public function getKey(): ?string;
 
     /**
      * Define the layout instance's unique and immutable identifier.
-     *
-     * @param string $id
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function id(string $id) : Layout;
+    public function id(string $id): Layout;
 
     /**
      * Retrieve the layout instance's unique identifier.
-     *
-     * @return null|string
      */
-    public function getId() : ?string;
+    public function getId(): ?string;
 
     /**
      * Define the amount of layouts of this kind that can be
      * instanciated in a Flexible container.
-     *
-     * @param null|int $instances
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
      */
-    public function limit(?int $instances) : Layout;
+    public function limit(?int $instances): Layout;
 
     /**
      * Retrieve the amount of layouts of this kind that can be
      * instanciated in a Flexible container.
-     *
-     * @return null|int
      */
-    public function getLimit() : ?int;
+    public function getLimit(): ?int;
 
     /**
      * Set the array of layout instance attributes. No checking is done.
      *
-     * @param array $attributes
-     * @param bool $syncOriginal
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
+     * @param  bool  $syncOriginal
      */
-    public function attributes(array $attributes, $syncOriginal = false) : Layout;
+    public function attributes(array $attributes, $syncOriginal = false): Layout;
 
     /**
      * Get all of the current attributes on the layout instance.
@@ -73,7 +54,6 @@ interface Layout
      * Check if the current layout can be inserted in the provided flexible container.
      * If not insertable, it is recommended to return an error code (int).
      *
-     * @param \Whitecube\LaravelFlexibleContent\Contracts\Flexible $container
      * @return bool|int
      */
     public function isInsertable(Flexible $container);
@@ -81,31 +61,24 @@ interface Layout
     /**
      * Create a layout instance from this layout.
      *
-     * @param int $instances
-     * @return \Whitecube\LaravelFlexibleContent\Contracts\Layout
+     * @param  int  $instances
      */
-    public function make(?string $id = null, array $attributes = []) : Layout;
+    public function make(?string $id = null, array $attributes = []): Layout;
 
     /**
      * Convert the layout instance's state to an array that can be saved.
-     *
-     * @return array
      */
-    public function toSerializableArray() : array;
+    public function toSerializableArray(): array;
 
     /**
      * Convert the layout instance's state to an array that can be displayed in an user interface.
      * It is intended to be extended and filled with the frontend component's required attributes.
-     *
-     * @return array
      */
-    public function toDisplayableArray() : array;
+    public function toDisplayableArray(): array;
 
     /**
      * Convert the layout to an array that can be displayed in a user menu.
      * It is intended to be extended and filled with the frontend component's required attributes.
-     *
-     * @return array
      */
-    public function toButtonArray() : array;
+    public function toButtonArray(): array;
 }

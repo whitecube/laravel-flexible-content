@@ -5,14 +5,14 @@ namespace Tests\Unit;
 use Illuminate\Support\Collection;
 use Whitecube\LaravelFlexibleContent\Flexible;
 
-it('can build instances from serialized data (array)', function() {
+it('can build instances from serialized data (array)', function () {
     $data = [
         ['key' => 'bar', 'id' => 'one', 'attributes' => []],
         ['key' => 'foo', 'id' => 'two', 'attributes' => []],
         ['key' => 'bar', 'id' => 'three', 'attributes' => []],
     ];
 
-    $flexible = (new Flexible())
+    $flexible = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->build($data);
@@ -24,14 +24,14 @@ it('can build instances from serialized data (array)', function() {
     expect($values->implode(','))->toBe('one,two,three');
 });
 
-it('can build instances from serialized data (collection)', function() {
+it('can build instances from serialized data (collection)', function () {
     $data = collect([
         (object) ['key' => 'bar', 'id' => 'one', 'attributes' => []],
         (object) ['key' => 'foo', 'id' => 'two', 'attributes' => []],
         (object) ['key' => 'bar', 'id' => 'three', 'attributes' => []],
     ]);
 
-    $flexible = (new Flexible())
+    $flexible = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->build($data);
@@ -43,14 +43,14 @@ it('can build instances from serialized data (collection)', function() {
     expect($values->implode(','))->toBe('one,two,three');
 });
 
-it('can build instances from serialized data (json)', function() {
+it('can build instances from serialized data (json)', function () {
     $data = json_encode([
         ['key' => 'bar', 'id' => 'one', 'attributes' => []],
         ['key' => 'foo', 'id' => 'two', 'attributes' => []],
         ['key' => 'bar', 'id' => 'three', 'attributes' => []],
     ]);
 
-    $flexible = (new Flexible())
+    $flexible = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->build($data);
@@ -62,19 +62,19 @@ it('can build instances from serialized data (json)', function() {
     expect($values->implode(','))->toBe('one,two,three');
 });
 
-it('can build instances from serialized data using custom callable', function() {
+it('can build instances from serialized data using custom callable', function () {
     $data = [
         ['key' => 'bar', 'id' => 'one', 'attributes' => []],
         ['key' => 'foo', 'id' => 'two', 'attributes' => []],
         ['key' => 'bar', 'id' => 'three', 'attributes' => []],
     ];
 
-    $flexible = (new Flexible())
+    $flexible = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
-        ->buildUsing(function(Flexible $container, $items) {
+        ->buildUsing(function (Flexible $container, $items) {
             foreach ($items as $item) {
-                $container->insert($item['key'], $item['attributes'], null, $item['id'] . '!');
+                $container->insert($item['key'], $item['attributes'], null, $item['id'].'!');
             }
         })
         ->build($data);
@@ -86,8 +86,8 @@ it('can build instances from serialized data using custom callable', function() 
     expect($values->implode(','))->toBe('one!,two!,three!');
 });
 
-it('can serialize instances into an array', function() {
-    $serialized = (new Flexible())
+it('can serialize instances into an array', function () {
+    $serialized = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->insert('foo', ['test' => 0])
@@ -107,8 +107,8 @@ it('can serialize instances into an array', function() {
     }
 });
 
-it('can serialize instances into a JSON string', function() {
-    $serialized = (new Flexible())
+it('can serialize instances into a JSON string', function () {
+    $serialized = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->insert('foo', ['test' => 0])
@@ -129,8 +129,8 @@ it('can serialize instances into a JSON string', function() {
     }
 });
 
-it('can serialize instances into a collection', function() {
-    $serialized = (new Flexible())
+it('can serialize instances into a collection', function () {
+    $serialized = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->insert('foo', ['test' => 0])
@@ -150,8 +150,8 @@ it('can serialize instances into a collection', function() {
     }
 });
 
-it('can serialize instances into a default (configurable) format', function() {
-    $flexible = (new Flexible())
+it('can serialize instances into a default (configurable) format', function () {
+    $flexible = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->insert('foo', ['test' => 0])
@@ -165,15 +165,15 @@ it('can serialize instances into a default (configurable) format', function() {
     expect($flexible->serialize())->toBeArray();
 });
 
-it('can serialize instances using a custom callable', function() {
-    $flexible = (new Flexible())
+it('can serialize instances using a custom callable', function () {
+    $flexible = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->insert('foo', ['test' => 0])
         ->insert('bar', ['test' => 1])
         ->insert('foo', ['test' => 2])
-        ->serializeUsing(function(Flexible $flexible) {
-            return $flexible->instances()->map(fn($instance) => $instance->getKey() . $instance->getAttributes()['test'])->implode(',');
+        ->serializeUsing(function (Flexible $flexible) {
+            return $flexible->instances()->map(fn ($instance) => $instance->getKey().$instance->getAttributes()['test'])->implode(',');
         });
 
     expect($flexible->serialize())->toBe('foo0,bar1,foo2');

@@ -2,12 +2,12 @@
 
 namespace Tests\Unit;
 
+use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 use Whitecube\LaravelFlexibleContent\Flexible;
 use Whitecube\LaravelFlexibleContent\LayoutsCollection;
-use Whitecube\LaravelFlexibleContent\Contracts\Layout;
 
-it('can find a layout by its key', function() {
-    $collection = (new Flexible())
+it('can find a layout by its key', function () {
+    $collection = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->register(fn ($layout) => $layout->key('baz'))
@@ -19,8 +19,8 @@ it('can find a layout by its key', function() {
     expect($layout->getKey())->toBe('bar');
 });
 
-it('can find multiple layouts by their key', function() {
-    $collection = (new Flexible())
+it('can find multiple layouts by their key', function () {
+    $collection = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->insert('foo')
@@ -41,8 +41,8 @@ it('can find multiple layouts by their key', function() {
     expect($baz->isEmpty())->toBeTrue();
 });
 
-it('can find multiple layouts with a different key', function() {
-    $collection = (new Flexible())
+it('can find multiple layouts with a different key', function () {
+    $collection = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->insert('foo')
@@ -63,8 +63,8 @@ it('can find multiple layouts with a different key', function() {
     expect($baz->count())->toBe(5);
 });
 
-it('can find multiple layouts with one of the provided keys', function() {
-    $collection = (new Flexible())
+it('can find multiple layouts with one of the provided keys', function () {
+    $collection = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->register(fn ($layout) => $layout->key('baz'))
@@ -77,19 +77,19 @@ it('can find multiple layouts with one of the provided keys', function() {
         ->insert('baz')
         ->instances();
 
-    $some = $collection->whereKeyIn(['bar','baz']);
+    $some = $collection->whereKeyIn(['bar', 'baz']);
 
     expect($some)->toBeInstanceOf(LayoutsCollection::class);
     expect($some->count())->toBe(4);
 
-    $none = $collection->whereKeyIn(['test','foobar']);
+    $none = $collection->whereKeyIn(['test', 'foobar']);
 
     expect($none)->toBeInstanceOf(LayoutsCollection::class);
     expect($none->isEmpty())->toBeTrue();
 });
 
-it('can find multiple layouts with none of the provided keys', function() {
-    $collection = (new Flexible())
+it('can find multiple layouts with none of the provided keys', function () {
+    $collection = (new Flexible)
         ->register(fn ($layout) => $layout->key('foo'))
         ->register(fn ($layout) => $layout->key('bar'))
         ->register(fn ($layout) => $layout->key('baz'))
@@ -102,12 +102,12 @@ it('can find multiple layouts with none of the provided keys', function() {
         ->insert('baz')
         ->instances();
 
-    $some = $collection->whereKeyNotIn(['bar','baz']);
+    $some = $collection->whereKeyNotIn(['bar', 'baz']);
 
     expect($some)->toBeInstanceOf(LayoutsCollection::class);
     expect($some->count())->toBe(3);
 
-    $none = $collection->whereKeyNotIn(['foo','bar','baz']);
+    $none = $collection->whereKeyNotIn(['foo', 'bar', 'baz']);
 
     expect($none)->toBeInstanceOf(LayoutsCollection::class);
     expect($none->isEmpty())->toBeTrue();
