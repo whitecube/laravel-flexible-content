@@ -18,6 +18,13 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
     use HidesAttributes;
 
     /**
+     * Indicates if the model exists.
+     *
+     * @var bool
+     */
+    public $exists = false;
+
+    /**
      * A short unique name for this Layout, usually used by front-end components
      *
      * @var string
@@ -329,6 +336,26 @@ class Layout implements LayoutInterface, ArrayAccess, JsonSerializable, Arrayabl
             'key' => $this->getKey(),
             'limit' => $this->getLimit(),
         ];
+    }
+
+    /**
+     * This method is called by the HasAttributes trait, and is usually
+     * defined on a model class. In this case, we don't need to handle
+     * it, but we do need to have the method to avoid errors.
+     */
+    public function relationResolver($classname, $key)
+    {
+        return false;
+    }
+
+    /**
+     * This method is called by the HasAttributes trait, and is usually
+     * defined on a model class. In this case, we don't need to handle
+     * it, but we do need to have the method to avoid errors.
+     */
+    public function preventsAccessingMissingAttributes()
+    {
+        return false;
     }
 
     /**

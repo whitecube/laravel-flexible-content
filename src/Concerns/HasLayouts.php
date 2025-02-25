@@ -25,7 +25,7 @@ trait HasLayouts
      * @param null|int $limit
      * @return $this
      */
-    public function register($layout, int $limit = null) : Flexible
+    public function register(string|Layout|callable $layout, ?int $limit = null) : Flexible
     {
         if(is_string($layout) && is_a($layout, Layout::class, true)) {
             $layout = new $layout;

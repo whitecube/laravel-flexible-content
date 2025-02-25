@@ -14,7 +14,7 @@ interface Flexible
      * @param null|int $limit
      * @return $this
      */
-    public function register($layout, int $limit = null) : Flexible;
+    public function register(string|Layout|callable $layout, ?int $limit = null) : Flexible;
 
     /**
      * Check if the Flexible container has a defined layout for given key.
@@ -94,5 +94,5 @@ interface Flexible
      * @param null|string $key
      * @return int
      */
-    public function count(?string $key = null);
+    public function count(?string $key = null): int;
 }

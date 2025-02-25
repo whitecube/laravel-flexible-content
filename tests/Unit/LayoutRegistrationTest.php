@@ -7,6 +7,7 @@ use Whitecube\LaravelFlexibleContent\LayoutsCollection;
 use Whitecube\LaravelFlexibleContent\Exceptions\InvalidLayoutException;
 use Whitecube\LaravelFlexibleContent\Exceptions\InvalidLayoutKeyException;
 use Tests\Fixtures\CustomLayout;
+use TypeError;
 
 it('can register and configure a basic layout using a closure as argument', function() {
     $flexible = new Flexible();
@@ -57,7 +58,7 @@ it('cannot register an instance that does not implement the Layout interface', f
     $flexible = new Flexible();
 
     $flexible->register(new Flexible());
-})->throws(InvalidLayoutException::class);
+})->throws(TypeError::class);
 
 it('cannot register a layout without defined key', function() {
     $flexible = new Flexible();

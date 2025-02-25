@@ -15,7 +15,7 @@ class InvalidLayoutKeyException extends InvalidArgumentException
      * @param bool $exists
      * @return \InvalidArgumentException
      */
-    static public function make(Layout $layout, string $key = null, $exists = false) : InvalidArgumentException
+    static public function make(Layout $layout, ?string $key = null, bool $exists = false) : InvalidArgumentException
     {
         $classname = get_class($layout);
         

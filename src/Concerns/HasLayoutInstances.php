@@ -132,7 +132,7 @@ trait HasLayoutInstances
      * @param null|string $key
      * @return int
      */
-    public function count(?string $key = null)
+    public function count(?string $key = null): int
     {
         if(! $this->instances) {
             return 0;
